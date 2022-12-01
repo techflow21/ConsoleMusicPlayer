@@ -8,7 +8,6 @@
 
             Start.AppStarter();
 
-
             Console.ReadLine();
         }
     }

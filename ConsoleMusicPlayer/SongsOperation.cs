@@ -1,4 +1,4 @@
-﻿/*
+﻿
 using static ConsoleMusicPlayer.Store;
 using System.Text.RegularExpressions;
 
@@ -6,37 +6,18 @@ namespace ConsoleMusicPlayer
 {
     internal static class SongsOperation
     {
-        public static PlayLists AddMusic()
+        public static void AddMusic()
         {
-            Console.WriteLine("Enter the name of music to add below (Supported Formats are .mp3, .acc and .wav)");
+            Console.WriteLine("Enter the name of music to add below: ");
             var musicName = Console.ReadLine();
 
-            string musicPattern = @"[a-zA-Z0-9]{2,35}.(mp3|acc|wav)$";
+            string musicPattern = @"[a-zA-Z0-9]{2,35}$";
             Regex regex = new(musicPattern);
 
             if (!regex.IsMatch(musicName))
             {
                 Console.WriteLine("You entered an invalid music, try again!");
                 AddMusic();
-            }
-            else
-            {
-                int musicListId = 0;
-
-                foreach (var musicList in GetMusicList())
-                {
-                    if (musicList.Id != musicListId)
-                    {
-                        playListId += 1;
-                    }
-                }
-
-                GetMusicList().Add(new MusicLists { Id = musicListId += 1, MusicListName = musicListName });
-                Console.WriteLine("\nMusic added successfully!\n\n>>>>>>>> Available Musics <<<<<<<<<<<<\n");
-
-                GetMusicList().ForEach(musicList => Console.WriteLine($"{musicList.Id}:    {musicList.musicListName}\n"));
-
-                //SelectMusicList();
             }
         }
 
@@ -74,6 +55,6 @@ namespace ConsoleMusicPlayer
         {
             //
         }
+
     }
 }
-*/

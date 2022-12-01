@@ -7,23 +7,7 @@ namespace ConsoleMusicPlayer
     {
         private static object playListSongs;
 
-        static List<PlayLists> GetPlayList()
-        {
-            return playLists;
-        }
-        static List<MusicLists> GetMusicList()
-        {
-            return musicLists;
-        }
-
-        /*static List<PlayListSongs> GetPlayListSong()
-        {
-            return playListSongs;
-        }*/
-
-
-        private static List<string> MyPlaylist = new List<string>();
-
+        public static List<string> MyPlaylist = new List<string>();
 
         public static void CreatePlayList()
         {
@@ -33,44 +17,34 @@ namespace ConsoleMusicPlayer
             string playListPattern = @"[a-zA-Z0-9]{2,20}$";
             Regex regex = new(playListPattern);
 
-            if (!regex.IsMatch(playListName))
+            if (regex.IsMatch(playListName))
             {
-                Console.WriteLine("You entered an invalid paylist name, try again!");
-                CreatePlayList();
+                PlaylistStore.Add(playListName, AddMusicTrack());
             }
             else
             {
-                PlaylistStore.Add(playListName, AddMusicTrack());
-                /*int playListId = 0;
-
-                foreach (var playList in GetPlayList())
-                {
-                    if (playList.Id != playListId)
-                    {
-                        playListId += 1;
-                    }
-                }*/
-
-                //GetPlayList().Add(new PlayLists { Id = playListId += 1, playListName = playListName });
-                //Console.WriteLine("\nPlaylist added successfully!\n\n>>>>>>>> Available Playlists <<<<<<<<<<<<\n");
-
-                //GetPlayList().ForEach(playList => Console.WriteLine($"{playList.Id}:    {playList.playListName}\n"));
-
-                //SelectPlayList();
+                Console.WriteLine("You entered an invalid paylist name, try again!");
+                CreatePlayList();
             }
         }
 
         public static void ViewPlayLists()
         {
+            int indexCount = 0;
             Console.WriteLine(">>>>>>>> Available Playlists <<<<<<<<<<<<\n");
-            GetPlayList().ForEach(playList => Console.WriteLine($"{playList.Id}:   {playList.playListName}\n"));
+
+            foreach (KeyValuePair<string, List<string>> playlist in Playlists)
+            {
+                playlist.Value.ForEach(playlistId => Console.WriteLine($"{indexCount}:     {playlist.Key}\n"));
+                indexCount++;
+            }
 
             SelectPlayList();
         }
 
         public static void SelectPlayList()
         {
-            Console.WriteLine("Enter 1 to add another playlist\nEnter 2 to Select your favorite playlist");
+            Console.WriteLine("\n   Enter 1 to add another playlist\n\n   Enter 2 to Select your favorite playlist\n");
 
             var option = Console.ReadLine();
 
@@ -84,7 +58,7 @@ namespace ConsoleMusicPlayer
 
                 case "2":
                     {
-                        PlayListSongs();
+                        //PlayListSongs();
                     }
                     break;
 
@@ -97,102 +71,60 @@ namespace ConsoleMusicPlayer
             }
         }
 
-        public static void PlayListSongs()
+
+        public static void PlaylistAddSong()
         {
-            Console.WriteLine("Enter 1 to see all available songs\nEnter 2 to access the playlist ID of the available songs: \n");
-            var inputOption = Console.ReadLine();
+            int indexCount = 0;
+            Console.WriteLine("Enter the Playlist Number to add Song to the playlist\n");
 
-            switch (inputOption)
+            foreach (KeyValuePair<string, List<string>> playList in Playlists)
             {
-                case "1":
-                    {
-                        ViewAllSongs();
-                    }
-                    break;
+                indexCount++;
+                Console.Write($"{indexCount}:   {playList.Key}\n");
+                MyPlaylist.Add(playList.Key);
+            }
 
-                case "2":
-                    {
-                        PlaylistSongsOption();
-                    }
-                    break;
+            Console.WriteLine("\nEnter 0 to Goto to Music Player Main Menu\nEnter 1 to Add Song\n");
+            string InputOption = Console.ReadLine();
 
-                default:
-                    {
-                        Console.WriteLine("You've entered an invalid  option, try again!");
-                        PlayListSongs();
-                    }
-                    break;
+            string pattern = @"[0-2]{1}$";
+            Regex regex = new(pattern);
+
+            if (regex.IsMatch(InputOption))
+            {
+                switch (InputOption)
+                {
+                    case "0":
+                        Console.Clear();
+                        Start.AppStarter();
+                        break;
+                    case "1":
+                        Console.Clear();
+                        SongHandler(playlistIndex);
+                        break;
+
+                    default:
+                        Console.Clear();
+                        Console.WriteLine("Invalid entry, Try again! ");
+                        PlaylistAddSong();
+                        break;
+                }
             }
         }
 
-        public static void PlaylistSongsOption()
-        {
-            GetPlayList().ForEach(playList => Console.WriteLine($"{playList.Id}:   {playList.playListName}\n"));
-
-            Console.WriteLine("Enter any of the Song's ID to select: \n");
-
-            var option = Console.ReadLine();
-
-            GetPlayList().ForEach(playList =>
-            {
-                try
-                {
-                    if (playList.Id == int.Parse(option))
-                    {
-                        Console.WriteLine($"{playList.playListName.ToUpper()} selected!\n");
-
-                        ViewPlaylistSongs();
-                    }
-                }
-                catch
-                {
-                    Console.WriteLine("You entered invalid playlist ID, try again");
-                    PlaylistSongsOption();
-                }
-            });
-        }
-
-        public static void ViewAllSongs()
-        {
-            Console.WriteLine(">>>>>>>> Available Songs <<<<<<<<<<<<\n");
-            GetMusicList().ForEach(song => Console.WriteLine($"{song.Id}:     {song.trackName} with Playlist ID of {song.playListId}\n"));
-            //SongsOperation();
-        }
-
-        public static void ViewPlaylistSongs()
-        {
-            foreach (PlayLists playList in playLists)
-            {
-                foreach (MusicLists musicList in musicLists)
-                {
-                    if (playList.Id == musicList.playListId)
-                    {
-                        List <PlayListSongs> playListSongs = new List <PlayListSongs>()
-                        {
-                            new PlayListSongs{Id = playList.Id, song = musicList.trackName }
-                        };
-                        
-                        playListSongs.ForEach(songItem => Console.WriteLine($"{songItem.Id}:      {songItem.song}\n"));
-                    }
-                }
-            }
-
-        }
 
         private static List<string> AddMusicTrack()
         {
             bool IsActive = true;
-            string pattern = @"[a-zA-Z0-9]{2,45}";
+            string pattern = @"[a-zA-Z0-9]{2,45}$";
             Regex regex = new Regex(pattern);
 
-            Console.WriteLine("Enter music track name you wish to add to playlist\n");
-            
             var musicTracks = new List<string>();
 
 
             while (IsActive)
             {
-                Console.WriteLine("Enter Music track name below: \n");
+                Console.WriteLine("Enter music track name you wish to add to playlist\n");
                 string? musicTrack = Console.ReadLine();
                 if (regex.IsMatch(musicTrack))
                 {
@@ -200,10 +132,9 @@ namespace ConsoleMusicPlayer
                 }
                 else
                 {
-                    Console.WriteLine("You entered an invalid music track name, try again!");
+                    Console.WriteLine("You entered an invalid music track name, try again!\n");
                 }
-
-                Console.Write("Enter 2 to stop adding music track or Enter any other key to continue adding: ");
+                Console.Write("\nEnter 2 to stop adding music track or Enter any other key to continue adding: \n");
                 string option = Console.ReadLine();
                 if (option == "2")
                 {
@@ -212,5 +143,44 @@ namespace ConsoleMusicPlayer
             }
             return musicTracks;
         }
+
+        public static void SongHandler(int playlistIndex)
+        {
+            DisplaySongs(playlistIndex);
+            int SongIndex = playlistIndex - 1;
+
+            Console.WriteLine($"Enter Song to Add to the playlist or\nEnter 0 to return to Music player Main Menu\n");
+            string InputOption = Console.ReadLine();
+            switch (InputOption)
+            {
+                case "0":
+                    Console.Clear();
+                    Start.AppStarter();
+                    break;
+                default:
+                    Playlists[MyPlaylist[SongIndex]].Add(InputOption);
+                    int Count = 0;
+                    SongHandler(playlistIndex);
+                    break;
+            }
+
+        }
+
+        public static void DisplaySongs(int index)
+        { 
+            int count = 0;
+            string Playlist = MyPlaylist[index - 1];
+            Console.Clear();
+            
+            foreach (string song in Playlists[Playlist])
+            {
+                count++;
+                Console.Write($"{count}: ");
+                Console.WriteLine(song);
+            }
+
+            Console.WriteLine($"Showing Playlist {Playlist}\n");
+        }
     }
+ 
 }
