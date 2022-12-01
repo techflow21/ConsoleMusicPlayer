@@ -5,6 +5,8 @@ namespace ConsoleMusicPlayer
 {
     internal class Crud
     {
+        private static object playListSongs;
+
         static List<PlayLists> GetPlayList()
         {
             return playLists;
@@ -13,6 +15,15 @@ namespace ConsoleMusicPlayer
         {
             return musicLists;
         }
+
+        /*static List<PlayListSongs> GetPlayListSong()
+        {
+            return playListSongs;
+        }*/
+
+
+        private static List<string> MyPlaylist = new List<string>();
+
 
         public static void CreatePlayList()
         {
@@ -29,7 +40,8 @@ namespace ConsoleMusicPlayer
             }
             else
             {
-                int playListId = 0;
+                PlaylistStore.Add(playListName, AddMusicTrack());
+                /*int playListId = 0;
 
                 foreach (var playList in GetPlayList())
                 {
@@ -37,14 +49,14 @@ namespace ConsoleMusicPlayer
                     {
                         playListId += 1;
                     }
-                }
+                }*/
 
-                GetPlayList().Add(new PlayLists { Id = playListId += 1, playListName = playListName });
-                Console.WriteLine("\nPlaylist added successfully!\n\n>>>>>>>> Available Playlists <<<<<<<<<<<<\n");
+                //GetPlayList().Add(new PlayLists { Id = playListId += 1, playListName = playListName });
+                //Console.WriteLine("\nPlaylist added successfully!\n\n>>>>>>>> Available Playlists <<<<<<<<<<<<\n");
 
-                GetPlayList().ForEach(playList => Console.WriteLine($"{playList.Id}:    {playList.playListName}\n"));
+                //GetPlayList().ForEach(playList => Console.WriteLine($"{playList.Id}:    {playList.playListName}\n"));
 
-                SelectPlayList();
+                //SelectPlayList();
             }
         }
 
@@ -128,6 +140,7 @@ namespace ConsoleMusicPlayer
                     if (playList.Id == int.Parse(option))
                     {
                         Console.WriteLine($"{playList.playListName.ToUpper()} selected!\n");
+
                         ViewPlaylistSongs();
                     }
                 }
@@ -143,58 +156,61 @@ namespace ConsoleMusicPlayer
         {
             Console.WriteLine(">>>>>>>> Available Songs <<<<<<<<<<<<\n");
             GetMusicList().ForEach(song => Console.WriteLine($"{song.Id}:     {song.trackName} with Playlist ID of {song.playListId}\n"));
-
             //SongsOperation();
         }
 
         public static void ViewPlaylistSongs()
         {
-           GetMusicList().ForEach(song =>
-           {
-               if (song.playListId.Equals(GetPlayList().ForEach(playList => playList.Id)
-               {
-
-               }
-
-              
-           });
-            //Console.WriteLine($"{song.Id}:     {song.trackName} with Playlist ID of {song.playListId}\n"));
-           
-        }
-
-        public static PlayLists AddMusic()
-        {
-            Console.WriteLine("Enter the name of music to add below (Supported Formats are .mp3, .acc and .wav)");
-            var musicName = Console.ReadLine();
-
-            string musicPattern = @"[a-zA-Z0-9]{2,35}.(mp3|acc|wav)$";
-            Regex regex = new(musicPattern);
-
-            if (!regex.IsMatch(musicName))
+            foreach (PlayLists playList in playLists)
             {
-                Console.WriteLine("You entered an invalid music, try again!");
-                CreatePlayList();
+                foreach (MusicLists musicList in musicLists)
+                {
+                    if (playList.Id == musicList.playListId)
+                    {
+                        List <PlayListSongs> playListSongs = new List <PlayListSongs>()
+                        {
+                            new PlayListSongs{Id = playList.Id, song = musicList.trackName }
+                        };
+                        
+                        playListSongs.ForEach(songItem => Console.WriteLine($"{songItem.Id}:      {songItem.song}\n"));
+                    }
+                }
             }
-            else
+
+        }
+
+        private static List<string> AddMusicTrack()
+        {
+            bool IsActive = true;
+            string pattern = @"[a-zA-Z0-9]{2,45}";
+            Regex regex = new Regex(pattern);
+
+            Console.WriteLine("Enter music track name you wish to add to playlist\n");
+            
+            var musicTracks = new List<string>();
+
+
+            while (IsActive)
             {
-                //PlayLists playLists = new PlayLists();
-                GetPlayList().Add(AddMusic());
-                Console.WriteLine("Music added successfully!");
+                Console.WriteLine("Enter Music track name below: \n");
+                string? musicTrack = Console.ReadLine();
+                if (regex.IsMatch(musicTrack))
+                {
+                    musicTracks.Add(musicTrack);
+                }
+                else
+                {
+                    Console.WriteLine("You entered an invalid music track name, try again!");
+                }
+
+                Console.Write("Enter 2 to stop adding music track or Enter any other key to continue adding: ");
+                string option = Console.ReadLine();
+                if (option == "2")
+                {
+                    IsActive = false;
+                }
             }
-            return AddMusic();
+            return musicTracks;
         }
-
-
-        public static void EditMusic()
-        {
-            //
-        }
-
-
-        public static void DeleteMusic()
-        {
-            //
-        }
-
     }
 }

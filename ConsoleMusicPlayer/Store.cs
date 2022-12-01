@@ -1,4 +1,6 @@
 ﻿
+using static ConsoleMusicPlayer.Store;
+
 namespace ConsoleMusicPlayer
 {
     internal static class Store
@@ -30,5 +32,14 @@ namespace ConsoleMusicPlayer
             new MusicLists { Id = 2, trackName ="OBO", singer = "Davido", playListId = 2},
             new MusicLists { Id = 3, trackName ="Young Forever", singer = "Jay Z", playListId = 3}
         };
+
+        public class PlayListSongs
+        {
+            public int Id { get; set; }
+            public string song { get; set; }
+        }
+
+        public static List<PlayListSongs> playListSongs = new List<PlayListSongs> {};
+
     }
 }
