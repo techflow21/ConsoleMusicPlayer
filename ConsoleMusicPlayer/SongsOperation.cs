@@ -24,13 +24,13 @@ namespace ConsoleMusicPlayer
 
         public static void EditMusic()
         {
-            //
+            ////
         }
 
 
         public static void DeleteMusic()
         {
-            //
+            ////
         }
         public static void PreviousOperation()
         {
