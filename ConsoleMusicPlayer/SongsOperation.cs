@@ -8,7 +8,7 @@ namespace ConsoleMusicPlayer
     {
         public static void AddMusic()
         {
-            Console.WriteLine("Enter the name of music to add below: ");
+            Console.WriteLine("Enter the name of song to add below: ");
             var musicName = Console.ReadLine();
 
             string musicPattern = @"[a-zA-Z0-9]{2,35}$";
