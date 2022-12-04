@@ -34,7 +34,7 @@ namespace ConsoleMusicPlayer
         }
         public static void PreviousOperation()
         {
-            //
+            ////
         }
         public static void NextOperation()
         {
