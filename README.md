@@ -7,3 +7,5 @@ The Console Music Player has the following Features:
 3. Delete the Playlist
 4. Add songs to specified playlist
 5. Delete Song from Playlist
+6. View Songs in order of addition
+7. View Songs in alphabetical order
