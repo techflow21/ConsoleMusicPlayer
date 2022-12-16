@@ -1,3 +1,8 @@
 # ConsoleMusicPlayer
 
-This is an implementation of Music Player with Console Application in C# Challenge.
+This is an implementation of Music Player with Console Application in C#.
+The Console Music Player has the following Features:
+1. View All Playlists
+2. Add new Playlist
+3. Delete the Playlist
+4. Add songs to specified playlist
